@@ -1,0 +1,110 @@
+{
+  "Navigation": {
+    "crm": "CRM",
+    "bot": "TG Bot",
+    "business": "For Business",
+    "cta": "Get Started"
+  },
+  "Hero": {
+    "title1_line1": "All Your Business",
+    "title1_line2": "Fully Synchronized",
+    "subtitle1": "Manage your workflow anywhere with our platform. Syncing on-the-go has never been easier.",
+    "btn1": "Get Started",
+    "btn2": "Learn More",
+    "title2": "Everything In One Place.",
+    "stat1_val": "2,500+",
+    "stat1_lbl": "Users",
+    "stat2_val": "92%",
+    "stat2_lbl": "Impact",
+    "stat3_val": "7 years",
+    "stat3_lbl": "Experience",
+    "scene3_left_title": "Craft Your Workflow",
+    "scene3_left_sub": "Personalize the system to fit your unique business needs without limits.",
+    "scene3_right_title": "Total Control",
+    "scene3_right_sub": "Analytics and insights at your fingertips, anytime you need them."
+  },
+  "Idea": {
+    "title": "What SyncK actually means.",
+    "description": "It's not just another software. It's an ecosystem where every module knows what the other is doing."
+  },
+  "Crm": {
+    "card1_title": "Personalize And Craft Your Pipeline",
+    "card1_desc": "Drag and drop clients through custom stages. Completely adaptable to your unique business workflow and sales cycle.",
+    "card1_ui_new": "New Lead",
+    "card1_ui_progress": "In Progress",
+    "card1_ui_closed": "Closed",
+    
+    "card2_title": "Customize Your Data Insights And Goals",
+    "card2_desc": "Access your complete ecosystem on the go. Instant synchronization means you never miss an update, anywhere you are.",
+    "card2_ui_status": "Sync Status",
+    "card2_ui_online": "Online",
+    "card2_ui_pause": "Pause Sync",
+    "card2_ui_force": "Force Sync",
+
+    "card3_title": "Deep Analytics And Reporting",
+    "card3_desc": "Visualize your performance with beautifully crafted charts. Track every metric that matters to your growth.",
+    "card3_ui_growth": "Growth",
+
+    "card4_title": "Free-Of-Charge Automation Everywhere",
+    "card4_desc": "Connect thousands of nodes globally. Our infrastructure ensures your data travels instantly without boundaries."
+  },
+  "Ecosystem": {
+    "title": "A Unified Machine.",
+    "subtitle": "Watch as isolated data points converge into a synchronized business machine.",
+    "module_sales": "Sales",
+    "module_clients": "Clients",
+    "module_analytics": "Analytics"
+  },
+  "Migration": {
+    "title": "Leave the Chaos Behind.",
+    "subtitle": "Migrate from spreadsheets and legacy CRMs seamlessly. No starting over.",
+    "step_old": "Legacy Data",
+    "step_migrating": "Syncing...",
+    "step_new": "Structured"
+  },
+  "TgBot": {
+    "title": "Command Your Business.",
+    "subtitle": "Trigger complex automations directly from Telegram.",
+    "cmd_input": "/add_client John Doe",
+    "cmd_processing": "Processing command...",
+    "cmd_result": "Client added to pipeline."
+  },
+  "Business": {
+    "title": "Custom Web Solutions.",
+    "subtitle": "From brief to launch. We design and develop premium digital experiences.",
+    "step1": "Brief & Strategy",
+    "step2": "UI/UX Design",
+    "step3": "Development",
+    "step4": "Global Launch"
+  },
+  "Global": {
+    "title": "Everything Connects.",
+    "subtitle": "The ultimate synchronization of tools, bots, and platforms."
+  },
+  "Mobile": {
+    "title": "Coming Next: SyncK Mobile.",
+    "subtitle": "The future of synchronization in your pocket. Currently in development.",
+    "status": "In Development"
+  },
+  "Cta": {
+    "title": "Bring your business into sync.",
+    "button": "Talk to SyncK",
+    "form_title": "Let's Talk",
+    "form_subtitle": "Leave your details and we'll sync up with you.",
+    "form_name": "Name",
+    "form_email": "Email",
+    "form_message": "Message",
+    "form_name_placeholder": "John Doe",
+    "form_email_placeholder": "john@example.com",
+    "form_message_placeholder": "Tell us about your needs...",
+    "form_submit": "Send Message",
+    "success_delivered_title": "Message Delivered",
+    "success_delivered_desc": "Thank you for reaching out. We will get back to you shortly.",
+    "success_persisted_title": "Request Saved",
+    "success_persisted_desc": "Your details have been securely stored. We will contact you soon.",
+    "success_validated_title": "Request Validated",
+    "success_validated_desc": "Your request has been successfully validated.",
+    "form_close": "Close",
+    "error_required": "Please fill in all required fields."
+  }
+}
