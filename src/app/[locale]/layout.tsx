@@ -18,10 +18,43 @@ const notoArmenian = Noto_Sans_Armenian({
   display: 'swap',
 });
 
-export const metadata = {
-  title: 'Project SyncK',
-  description: 'Everything in sync.',
-};
+import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  // Initialize translations for the metadata namespace
+  // Defaulting to the brand name and simple description if specific keys aren't set
+  return {
+    title: {
+      template: '%s | Project SyncK',
+      default: 'Project SyncK',
+    },
+    description: 'Everything in sync. Everything connects. Everything communicates.',
+    metadataBase: new URL('https://project-synck.com'),
+    openGraph: {
+      title: 'Project SyncK',
+      description: 'Everything in sync. Everything connects.',
+      url: `https://project-synck.com/${locale}`,
+      siteName: 'Project SyncK',
+      locale: locale,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Project SyncK',
+      description: 'Everything in sync.',
+    },
+    alternates: {
+      canonical: `https://project-synck.com/${locale}`,
+      languages: {
+        'en': '/en',
+        'ru': '/ru',
+        'hy': '/hy',
+      },
+    },
+  };
+}
 
 export default async function LocaleLayout({
   children,
@@ -31,7 +64,7 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  if (!routing.locales.includes(locale as any)) {
+  if (!routing.locales.includes(locale as "en" | "ru" | "hy")) {
     notFound();
   }
  

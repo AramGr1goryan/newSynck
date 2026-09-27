@@ -14,9 +14,9 @@ export default function Business() {
 
   useGSAP(() => {
     // Large cards overlapping parallax
-    const cards = gsap.utils.toArray('.business-card');
+    const cards = gsap.utils.toArray<HTMLElement>('.business-card');
     
-    cards.forEach((card: any, i) => {
+    cards.forEach((card, i) => {
       gsap.to(card, {
         yPercent: -20 * (cards.length - i),
         ease: "none",
@@ -90,11 +90,11 @@ export default function Business() {
           <div className="flex-1 w-full bg-black h-[200px] rounded-2xl p-6 flex flex-col gap-2 font-mono text-[10px] text-green-400 overflow-hidden shadow-inner">
             <div><span className="text-pink-500">const</span> <span className="text-blue-400">SyncK</span> = new App();</div>
             <div><span className="text-blue-400">SyncK</span>.init(&#123;</div>
-            <div className="pl-4">mode: <span className="text-yellow-300">'production'</span>,</div>
+            <div className="pl-4">mode: <span className="text-yellow-300">&apos;production&apos;</span>,</div>
             <div className="pl-4">speed: <span className="text-orange-400">999</span></div>
             <div>&#125;);</div>
-            <div className="mt-4 text-gray-500">// Compiling...</div>
-            <div className="text-gray-500">// Done in 0.1s</div>
+            <div className="mt-4 text-gray-500">{/* Compiling... */}</div>
+            <div className="text-gray-500">{/* Done in 0.1s */}</div>
           </div>
         </div>
 

@@ -16,9 +16,9 @@ export default function SynckCrm() {
     // Exact adaptation from reference: 00:04 - 00:08
     // Cards fade in and slide up when scrolling into view
     
-    const cards = gsap.utils.toArray('.crm-card');
+    const cards = gsap.utils.toArray<HTMLElement>('.crm-card');
     
-    cards.forEach((card: any, i) => {
+    cards.forEach((card, i) => {
       // 1. Card container entrance
       gsap.fromTo(card,
         { y: 80, opacity: 0 },

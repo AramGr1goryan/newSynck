@@ -39,20 +39,6 @@ export default function Cta() {
     );
   }, { scope: containerRef });
 
-  const handleScroll = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 100;
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      window.scrollTo({
-        top: elementRect - bodyRect - offset,
-        behavior: 'smooth'
-      });
-      history.pushState(null, '', `#${id}`);
-    }
-  };
-
   const handleAction = async (formData: FormData) => {
     setError('');
     

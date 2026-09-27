@@ -1,17 +1,14 @@
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
 /**
  * Rate limit abstraction layer.
  * 
- * DEVELOPMENT RATE LIMIT vs PRODUCTION RATE LIMIT
+ * PRODUCTION (Serverless / Distributed Environments like Vercel):
+ * Uses Upstash Redis if environment variables are present.
  * 
  * DEVELOPMENT:
- * This implementation currently uses an in-memory `RateLimitStore`.
- * It is suitable ONLY for local development or single-instance Node.js servers.
- * 
- * PRODUCTION (Serverless / Distributed Environments like Vercel):
- * In-memory state is NOT shared across serverless functions or edge nodes.
- * You MUST implement a distributed adapter (e.g., Redis via @upstash/ratelimit).
- * 
- * TODO [PRODUCTION]: Replace `memoryStore` with a distributed storage adapter.
+ * Falls back to an in-memory `RateLimitStore` if Upstash is not configured.
  */
 
 interface RateLimitStore {
@@ -21,7 +18,33 @@ interface RateLimitStore {
 // Development fallback store
 const memoryStore: RateLimitStore = {};
 
+// Optional Upstash configuration
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+// Initialize Upstash Ratelimit only if credentials exist
+const upstashRatelimit = (redisUrl && redisToken)
+  ? new Ratelimit({
+      redis: new Redis({ url: redisUrl, token: redisToken }),
+      limiter: Ratelimit.slidingWindow(5, "15 m"), // 5 requests per 15 minutes
+      analytics: true,
+      prefix: "@upstash/ratelimit",
+    })
+  : null;
+
 export async function rateLimit(ip: string, limit: number, windowMs: number): Promise<boolean> {
+  // Use Upstash if configured
+  if (upstashRatelimit) {
+    try {
+      const { success } = await upstashRatelimit.limit(ip);
+      return success;
+    } catch (error) {
+      console.error("[RateLimit] Upstash error, falling back to memory:", error);
+      // Fallback intentionally proceeds to memoryStore below
+    }
+  }
+
+  // Fallback to in-memory store
   const now = Date.now();
   const record = memoryStore[ip];
 

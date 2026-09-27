@@ -1,4 +1,5 @@
 import { rateLimit } from '@/lib/rate-limit';
+import { Resend } from 'resend';
 
 export interface ContactData {
   name: string;
@@ -14,6 +15,17 @@ export interface ContactResponse {
   isPersisted: boolean;
   isDelivered: boolean;
   error?: string;
+}
+
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+
+function escapeHtml(unsafe: string) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 export class ContactService {
@@ -70,23 +82,56 @@ export class ContactService {
     }
 
     // 4. Persistence & Delivery
-    // Check environment variables to determine if actual persistence/delivery logic is wired up.
     const isDatabaseConfigured = process.env.CONTACT_DB === 'configured';
-    const isProviderConfigured = process.env.CONTACT_PROVIDER === 'configured';
+    const isProviderConfigured = !!resend && !!process.env.CONTACT_FROM_EMAIL && !!process.env.CONTACT_TO_EMAIL;
     
     let isPersisted = false;
     let isDelivered = false;
 
     try {
       if (isDatabaseConfigured) {
-        // TODO: Implement actual database storage logic (e.g. Prisma, Supabase)
-        // await Database.save(data);
+        // TODO: Implement actual database storage logic
         isPersisted = true;
       }
 
       if (isProviderConfigured) {
-        // TODO: Implement actual provider logic (e.g. Resend, SendGrid)
-        // await EmailProvider.send({...});
+        const timestamp = new Date().toISOString();
+        const safeName = escapeHtml(data.name);
+        const safeEmail = escapeHtml(data.email);
+        const safeMessage = escapeHtml(data.message).replace(/\n/g, '<br/>');
+
+        const htmlTemplate = `
+          <div style="font-family: sans-serif; color: #111; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
+            <h2 style="color: #6657E1; margin-top: 0;">New Contact Request</h2>
+            <p style="color: #666; font-size: 14px; border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">Submitted at: ${timestamp}</p>
+            <div style="margin-top: 20px;">
+              <p><strong>Name:</strong> ${safeName}</p>
+              <p><strong>Email:</strong> ${safeEmail}</p>
+              <div style="margin-top: 20px; background-color: #f9f9f9; padding: 15px; border-radius: 6px;">
+                <p style="margin-top: 0; font-weight: bold;">Message:</p>
+                <p style="margin: 0; line-height: 1.6;">${safeMessage}</p>
+              </div>
+            </div>
+            <div style="margin-top: 30px; font-size: 12px; color: #999; text-align: center;">
+              <p>This is an automated message from Project SyncK.</p>
+            </div>
+          </div>
+        `;
+
+        const { error } = await resend!.emails.send({
+          from: `Project SyncK <${process.env.CONTACT_FROM_EMAIL}>`,
+          to: [process.env.CONTACT_TO_EMAIL!],
+          subject: `New SyncK Contact Request from ${safeName}`,
+          html: htmlTemplate,
+          replyTo: data.email
+        });
+
+        if (error) {
+          console.error('[ContactService] Resend delivery failed', error);
+          // Return failure for delivery step
+          return { success: false, message: 'Failed to deliver message. Please try again.', isValidated: true, isPersisted, isDelivered: false };
+        }
+        
         isDelivered = true;
       }
     } catch (error) {
